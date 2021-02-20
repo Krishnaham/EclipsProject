@@ -1,0 +1,55 @@
+package com.gmail.utils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.*;
+
+public class ExcelReader1 {
+	
+	public static ArrayList<String> fileReader(String filepath, String sheetname)
+	{
+		ArrayList<String> list =new ArrayList<String>();
+		try {
+			FileInputStream file = new FileInputStream(filepath);
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			XSSFSheet sheet =workbook.getSheet(sheetname);
+			
+			int rows =sheet.getLastRowNum();
+			int cols= sheet.getRow(0).getLastCellNum();
+			
+			for (int r =1;r<=rows;r++)
+			{
+				String rowData="";
+				Row row = sheet.getRow(r);
+				for (int c=0; c<cols;c++)
+				{
+					Cell cell=row.getCell(c);
+					
+					switch(cell.getCellType())
+					{
+					case STRING: rowData+= cell.getStringCellValue()+"|";break;
+					case NUMERIC:rowData+=cell.getNumericCellValue()+"|";break;
+					case BOOLEAN: rowData+=cell.getBooleanCellValue()+"|";break;
+					}
+					System.out.print(" | ");
+				}	
+				System.out.println();
+				list.add(rowData);
+			}
+						
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+		
+		
+		
+		
+	} 
+
+}
